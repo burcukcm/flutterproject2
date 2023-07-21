@@ -1,19 +1,17 @@
 import 'dart:async';
-import 'package:flutterproject/bilgiler.dart';
-import 'package:flutterproject/dbhelper.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutterproject/Infos.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';  //join fonksiyonunu kullanmak için
+import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static const _databasename = "bilgiler.db";
+  static const _databasename = "infos.db";
   static const _databaseVersion = 1;
-  static const table = 'bilgiler_table';
+  static const table = 'infos_table';
   static const columnid = 'id';
-  static const columnad = 'ad';
-  static const columnsoyad = 'soyad';
-  static const columnrutbe = 'rutbe';
-  static const columnsicil = 'sicil';
+  static const columnname= 'name';
+  static const columnsurname= 'surname';
+  static const columnrank = 'rank';
+  static const columnrecord = 'record';
 
   DatabaseHelper._privateConstructor();
 
@@ -21,8 +19,9 @@ class DatabaseHelper {
   static Database? _database;
 
   Future<Database?> get database async {
-    if (_database != null) return database;
+    if (_database != null) return _database;
     _database = await _initDatabase();
+    return _database;
   }
 
   _initDatabase() async {
@@ -34,36 +33,54 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
     CREATE TABLE  $table(
-    $columnid İNTEGER PRİMARY KEY AUTOINCREMENT,
-    $columnad TEXT  NOT NULL,
-    $columnrutbe TEXT NOT NULL,
-    $columnsicil TEXT NOT NULL,
-    $columnsoyad TEXT NOT NULL
+    $columnid INTEGER PRIMARY KEY AUTOINCREMENT,
+    $columnname TEXT NOT NULL,
+    $columnrank TEXT NOT NULL,
+    $columnrecord TEXT NOT NULL,
+    $columnsurname TEXT NOT NULL
     )
     ''');
   }
-
-  Future<int> insert(Bilgiler bilgiler) async {
+  Future<int> insert(Infos infos) async {
     Database? db = await instance.database;
     return await db!.insert(table, {
-      'ad': bilgiler.ad,
-      'soyad': bilgiler.soyad,
-      'rutbe': bilgiler.rutbe,
-      'sicil': bilgiler.sicil,
+      'name': infos.name,
+      'surname': infos.surname,
+      'rank': infos.rank,
+      'record': infos.record,
     });
   }
-
-  Future<int> update(Bilgiler bilgiler) async {
+  Future<int> update(Infos infos) async {
     Database? db = await instance.database;
-    int id = toMap()['id'];
+    int id = Infos.toMap()[columnid];
     return await db!.update(
-        table, Bilgiler.toMap(), where: '$columnid =?', whereArgs: [id]);
+      table,
+      Infos.toMap(),
+      where: '$columnid = ?',
+      whereArgs: [id],
+    );
   }
 
-  Future<int> delete(int sicil) async {
+  Future<int> delete(int id) async {
     Database? db = await instance.database;
-    int id = toMap()['id'];
     return await db!.delete(
-        table, Bilgiler.toMap(), where: '$columnid =?', whereArgs: [id]);
+      table,
+      where: '$columnid = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Infos>> queryAll() async {
+    Database? db = await instance.database;
+    List<Map<String, dynamic>> maps = await db!.query(table);
+    return List.generate(maps.length, (index) {
+      return Infos(
+        id: maps[index][columnid],
+        name: maps[index][columnname],
+        surname: maps[index][columnsurname],
+        rank: maps[index][columnrank],
+        record: maps[index][columnrecord],
+      );
+    });
   }
 }

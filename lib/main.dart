@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/ikincisayfa.dart';
-import 'package:flutterproject/ucuncusayfa.dart';
+import 'package:flutterproject/dbhelper.dart';
+import 'package:flutterproject/secondPage.dart';
+import 'package:flutterproject/thirdPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: IconButton(
             icon: const Icon(Icons.dashboard_outlined,color: Colors.white),iconSize: 30,
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ucuncusayfa()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => thirdPage()));
             }
         ),
         backgroundColor: Colors.lightBlue,
@@ -43,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('resimler/code.jpg'),//arka plan resmi
+            image: AssetImage('photos/code.jpg'),//arka plan resmi koydum
             fit: BoxFit.cover, // resmi boyutlandırır ve orantılar.
           ),
         ),
@@ -62,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ElevatedButton(
                   child: const Text("NEW",style: TextStyle(color: Colors.deepPurple,fontSize: 20,fontWeight: FontWeight.bold),),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ikinciSayfa()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const secondPage()));
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
