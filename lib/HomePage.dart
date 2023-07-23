@@ -1,7 +1,6 @@
+import 'package:flutterproject/SecondPage.dart';
+import 'package:flutterproject/ThirdPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/dbhelper.dart';
-import 'package:flutterproject/secondPage.dart';
-import 'package:flutterproject/thirdPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mirsad Assistant',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -35,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: IconButton(
             icon: const Icon(Icons.dashboard_outlined,color: Colors.white),iconSize: 30,
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => thirdPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()));
             }
         ),
         backgroundColor: Colors.lightBlue,
@@ -44,8 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('photos/code.jpg'),//arka plan resmi koydum
-            fit: BoxFit.cover, // resmi boyutlandırır ve orantılar.
+            image: AssetImage('photos/code.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
         child:Column(
@@ -54,23 +53,23 @@ class _MyHomePageState extends State<MyHomePage> {
             const Spacer(),
             const Align(
                 alignment: Alignment.center,
-                child: Text("\"WELCOME !\"",style:TextStyle(fontSize: 50,color: Colors.white, fontStyle: FontStyle.italic,))),
+                child: Text("\"WELCOME !\"",style:TextStyle(fontSize: 50,color: Colors.white, fontStyle: FontStyle.italic,))
+            ),
             const Spacer(),
             Center(
               child: SizedBox(
                 width: 175,
                 height: 50,
                 child: ElevatedButton(
-                  child: const Text("NEW",style: TextStyle(color: Colors.deepPurple,fontSize: 20,fontWeight: FontWeight.bold),),
+                  child: Text("NEW",style: TextStyle(color: Colors.deepPurple,fontSize: 20,fontWeight: FontWeight.bold),),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const secondPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondPage()));
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(150),
                     ),
                     backgroundColor: Colors.white,
-                    elevation: 5,
                   ),
                 ),
               ),
@@ -80,6 +79,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-
   }
 }

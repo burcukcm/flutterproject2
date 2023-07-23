@@ -1,38 +1,34 @@
+import 'package:flutterproject/ThirdPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/Infos.dart';
-import 'package:flutterproject/thirdPage.dart';
-import 'dbhelper.dart';
+import 'package:flutterproject/databasehelper.dart';
 
-class secondPage extends StatefulWidget {
-  const secondPage({Key? key});
+class SecondPage extends StatefulWidget {
+  const SecondPage({Key? key}) : super(key: key);
 
   @override
-  State<secondPage> createState() => _secondPageState();
+  _SecondPageState createState() => _SecondPageState();
 }
 
-class _secondPageState extends State<secondPage> {
-
-  final Dbhelper = DatabaseHelper.instance; //VERİ TABANI İŞLEMLERİNİ GERÇEKLEŞTİRMEK İÇİN
-
-  TextEditingController nameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
-  TextEditingController rankController = TextEditingController();
-  TextEditingController recordController = TextEditingController();
-
-  List<Infos> infoList = [];
+class _SecondPageState extends State<SecondPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController portController = TextEditingController();
+  final TextEditingController branchController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
         title: const Center(
-            child: Text("MİRSAD ASSİSTANT",
-                style: TextStyle(fontWeight: FontWeight.bold))),
+          child: Text(
+            "MİRSAD ASSİSTANT",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         leading: IconButton(
-          icon:
-          const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
+          icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
           iconSize: 30,
           onPressed: () {
             Navigator.pop(context);
@@ -40,12 +36,10 @@ class _secondPageState extends State<secondPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.arrow_circle_right_outlined,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_circle_right_outlined, color: Colors.white),
             iconSize: 30,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => thirdPage()),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()));
             },
           ),
         ],
@@ -65,48 +59,48 @@ class _secondPageState extends State<secondPage> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: nameController, // BU METOD İLE GÜNCEL KONTROL SAĞLANIYOR
+                    controller: titleController,
                     onChanged: (value) {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Name:',
+                      labelText: 'Title:',
                       fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    controller: surnameController,
+                    controller: portController,
                     onChanged: (value) {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Surname:',
+                      labelText: 'Port number:',
                       fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    controller: rankController,
+                    controller: branchController,
                     onChanged: (value) {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Rank:',
+                      labelText: 'Branch Name:',
                       fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    controller: recordController,
+                    controller: dateController,
                     onChanged: (value) {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Record:',
+                      labelText: 'Date:',
                       fillColor: Colors.white,
                       filled: true,
                     ),
@@ -121,39 +115,34 @@ class _secondPageState extends State<secondPage> {
                   backgroundColor: Colors.white,
                   side: const BorderSide(color: Colors.black38, width: 2.0),
                 ),
-                child: const Text("INSERT DETAILS",
-                    style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold)),
+                child: const Text(
+                  "SAVE",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 onPressed: () {
-                  String name = nameController.text;
-                  String surname = surnameController.text;
-                  String rank = rankController.text;
-                  int record = int.parse(recordController.text);
-                  _insert(name, surname, rank, record);
+                  _saveData(); // save tıklayınca _saveData komutu iel datatbase kayıt oldu.
                 },
               ),
             ),
             const Spacer(),
-            const SizedBox(
-              height: 16.0,
-            ),
+            const SizedBox(height: 16.0),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
                 child: const Text(
                   "-SHOW CURRENT DATA-",
                   style: TextStyle(
-                      color: Colors.deepOrange,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.deepOrange,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => thirdPage()),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()),);
                 },
               ),
             ),
@@ -163,20 +152,39 @@ class _secondPageState extends State<secondPage> {
     );
   }
 
-  void _insert(String name, String surname, String rank, int record) async {
-    /* _insert nesnesi veritabanına eklenir. Eklenen veri, infoList listesine de eklenerek
-     kullanıcı arayüzünde gösterilir.*/
-    Infos infos = Infos(
-      name: name,
-      surname: surname,
-      rank: rank,
-      record: record,
-    );
-    final id = await Dbhelper.insert(infos);
+  void _saveData() {
+    final dbHelper = DatabaseHelper();
+    String title = titleController.text;
+    int port = int.tryParse(portController.text) ?? 0;
+    String branchName = branchController.text;
+    String date = dateController.text;
 
-    setState(() {
-      infoList.add(infos);
-    });
+    dbHelper.insertData(title, port, branchName, date);
+
+    if (title.isNotEmpty && port != null && branchName.isNotEmpty && date.isNotEmpty) {
+      dbHelper.insertData(title, port, branchName, date);
+      titleController.clear();
+      portController.clear();
+      branchController.clear();
+      dateController.clear();
+    } else {
+      // Eksik veya hatalı giriş olduğunda kullanıcıya uyarı mesajı verdik
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Hata'),
+          content: const Text('Lütfen tüm alanları doldurun ve geçerli bir port numarası girin.'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Tamam'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
+
+
 
