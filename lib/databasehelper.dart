@@ -53,5 +53,5 @@ class DatabaseHelper {
     await db.delete('infos', where: 'id = ?', whereArgs: [id]);
   }
 
-// CRUD işlemleri burada eklenebilir: güncelleme, sorgulama vb.
+
 }
