@@ -38,7 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
             }
         ),
         backgroundColor: Colors.lightBlue,
-        title: const Center(child: Text("MİRSAD ASSİSTANT",style:TextStyle(fontWeight: FontWeight.bold))),
+        title: const Center(child: Padding(
+          padding: EdgeInsets.only(right: 40.0),
+          child: Text("MİRSAD ASSİSTANT",style:TextStyle(fontWeight: FontWeight.bold)),
+        )),
       ),
       body: DecoratedBox(
         decoration: const BoxDecoration(

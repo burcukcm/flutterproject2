@@ -13,7 +13,6 @@ class DatabaseHelper {
     _database = await initDatabase();
     return _database!;
   }
-
   Future<Database> initDatabase() async {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath, 'infos.db');
@@ -32,13 +31,16 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<void> insertData(String title,int port, String branchName, String date) async {
+  Future<void> insertData(String title, int port, String branchName, String date) async {
+    if (title.isEmpty || branchName.isEmpty || date.isEmpty) {
+      throw Exception('Lütfen tüm alanları doldurun.');
+    }
+
     final db = await database;
-    var branch;
     await db.insert('infos', {
       'title': title,
       'port': port,
-      'branch': branch,
+      'branch': branchName,
       'date': date,
     });
   }
@@ -53,5 +55,9 @@ class DatabaseHelper {
     await db.delete('infos', where: 'id = ?', whereArgs: [id]);
   }
 
-// CRUD işlemleri burada eklenebilir: güncelleme, sorgulama vb.
+  Future<void> updateData(Map<String, dynamic> newData) async {
+    final db = await database;
+    int id = newData['id'];
+    await db.update('infos', newData, where: 'id = ?', whereArgs: [id]);
+  }
 }

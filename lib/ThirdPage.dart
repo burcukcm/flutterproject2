@@ -29,7 +29,9 @@ class _ThirdPageState extends State<ThirdPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
-        title: const Center(child: Text("MİRSAD ASSİSTANT", style: TextStyle(fontWeight: FontWeight.bold))),
+        title: const Center(
+          child: Text("MİRSAD ASSİSTANT", style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
           iconSize: 30,
@@ -59,6 +61,7 @@ class _ThirdPageState extends State<ThirdPage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
+                    _navigateToSecondPage(dataList[index]);
                   },
                   child: Container(
                     color: Colors.white,
@@ -126,9 +129,10 @@ class _ThirdPageState extends State<ThirdPage> {
               child: const Text(
                 "REFRESH",
                 style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.deepPurple,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onPressed: () {
                 _getData();
@@ -143,15 +147,13 @@ class _ThirdPageState extends State<ThirdPage> {
               child: const Text(
                 "NEW",
                 style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.deepPurple,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SecondPage()),
-                );
+                _navigateToSecondPage(null);
               },
             ),
             const Spacer(),
@@ -161,11 +163,66 @@ class _ThirdPageState extends State<ThirdPage> {
     );
   }
 
+  void _navigateToSecondPage(Map<String, dynamic>? data) async {
+    final result = await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SecondPage(data: data),
+      ),
+    );
+    if (result != null) {
+      if (data == null) {
+        _saveData(result);
+      } else {
+        _updateData(result);
+      }
+    }
+    _getData();
+  }
+
+  void _saveData(Map<String, dynamic> newData) async {
+    String title = newData['title'];
+    int port = newData['port'];
+    String branchName = newData['branch'];
+    String date = newData['date'];
+
+    if (title.isNotEmpty && port > 0 && branchName.isNotEmpty && date.isNotEmpty) {
+      dbHelper.insertData(title, port, branchName, date);
+    } else {
+      _showErrorDialog("Please fill in all fields.");
+    }
+  }
+
+  void _updateData(Map<String, dynamic> updatedData) async {
+    try {
+      await dbHelper.updateData(updatedData);
+    } catch (e) {
+      _showErrorDialog(e.toString());
+    }
+  }
+
   void _deleteData(int id) async {
     await dbHelper.deleteData(id);
     _getData();
   }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ERROR!'),
+        content: Text(message),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
 
 
 

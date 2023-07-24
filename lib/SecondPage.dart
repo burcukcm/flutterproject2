@@ -1,20 +1,32 @@
-import 'package:flutterproject/ThirdPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterproject/ThirdPage.dart';
 import 'package:flutterproject/databasehelper.dart';
 
 class SecondPage extends StatefulWidget {
-  const SecondPage({Key? key}) : super(key: key);
+  final Map<String, dynamic>? data;
+
+  const SecondPage({Key? key, this.data}) : super(key: key);
 
   @override
   _SecondPageState createState() => _SecondPageState();
 }
 
 class _SecondPageState extends State<SecondPage> {
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController portController = TextEditingController();
   final TextEditingController branchController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.data != null) {
+      titleController.text = widget.data!['title'];
+      portController.text = widget.data!['port'].toString();
+      branchController.text = widget.data!['branch'];
+      dateController.text = widget.data!['date'];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,7 @@ class _SecondPageState extends State<SecondPage> {
           icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
           iconSize: 30,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context, _getDataMap());
           },
         ),
         actions: [
@@ -72,6 +84,7 @@ class _SecondPageState extends State<SecondPage> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: portController,
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -96,9 +109,8 @@ class _SecondPageState extends State<SecondPage> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: dateController,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
+                    readOnly: true,
+                    onTap: _selectDate,
                     decoration: const InputDecoration(
                       labelText: 'Date:',
                       fillColor: Colors.white,
@@ -124,32 +136,30 @@ class _SecondPageState extends State<SecondPage> {
                   ),
                 ),
                 onPressed: () {
-                  _saveData(); // save tıklayınca _saveData komutu iel datatbase kayıt oldu.
+                  _saveData();
                 },
               ),
             ),
             const Spacer(),
-            const SizedBox(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                child: const Text(
-                  "-SHOW CURRENT DATA-",
-                  style: TextStyle(
-                    color: Colors.deepOrange,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()),);
-                },
-              ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        dateController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      });
+    }
   }
 
   void _saveData() {
@@ -159,32 +169,55 @@ class _SecondPageState extends State<SecondPage> {
     String branchName = branchController.text;
     String date = dateController.text;
 
-    dbHelper.insertData(title, port, branchName, date);
+    if (title.isNotEmpty && portController.text.isNotEmpty && branchName.isNotEmpty && date.isNotEmpty) {
+      final newData = {
+        'id': widget.data != null ? widget.data!['id'] : null,
+        'title': title,
+        'port': port,
+        'branch': branchName,
+        'date': date,
+      };
 
-    if (title.isNotEmpty && port != null && branchName.isNotEmpty && date.isNotEmpty) {
-      dbHelper.insertData(title, port, branchName, date);
+      if (widget.data != null) {
+        dbHelper.updateData(newData);
+      } else {
+        dbHelper.insertData(title, port, branchName, date);
+      }
+
       titleController.clear();
       portController.clear();
       branchController.clear();
       dateController.clear();
     } else {
-      // Eksik veya hatalı giriş olduğunda kullanıcıya uyarı mesajı verdik
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Hata'),
-          content: const Text('Lütfen tüm alanları doldurun ve geçerli bir port numarası girin.'),
+          title: const Text('ERROR!'),
+          content: const Text('Please fill in all fields.'),
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Tamam'),
+              child: const Text('OK'),
             ),
           ],
         ),
       );
     }
   }
+
+  Map<String, dynamic> _getDataMap() {
+    String title = titleController.text;
+    int port = int.tryParse(portController.text) ?? 0;
+    String branchName = branchController.text;
+    String date = dateController.text;
+
+    return {
+      'id': widget.data != null ? widget.data!['id'] : null,
+      'title': title,
+      'port': port,
+      'branch': branchName,
+      'date': date,
+    };
+  }
 }
-
-
 
