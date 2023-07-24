@@ -34,7 +34,7 @@ class DatabaseHelper {
 
   Future<void> insertData(String title, int port, String branchName, String date) async {
     if (title.isEmpty || branchName.isEmpty || date.isEmpty) {
-      throw Exception('Lütfen tüm alanları doldurun.');
+      throw Exception('Please fill in all fields.');
     }
 
     final db = await database;

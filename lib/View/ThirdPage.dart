@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/SecondPage.dart';
-import 'package:flutterproject/databasehelper.dart';
+import 'package:flutterproject/View/SecondPage.dart';
+import 'package:flutterproject/helper/databasehelper.dart';
+import 'package:flutterproject/constants/a.constants.dart';
+import 'package:flutterproject/navigationHelper.dart';
+
+const double sizedBoxHeight = 55.0,sizedBoxWidth = double.infinity;
 
 class ThirdPage extends StatefulWidget {
   const ThirdPage({Key? key});
@@ -28,22 +32,25 @@ class _ThirdPageState extends State<ThirdPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor:AppColors.primaryColor,
         title: const Center(
-          child: Text("MİRSAD ASSİSTANT", style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Padding(
+            padding: EdgeInsets.only(right: 45.0),
+            child: Text("MİRSAD ASSİSTANT", style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
-          iconSize: 30,
+          icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
+          iconSize: AppSize.iconSize,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondPage()));
           },
         ),
       ),
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('photos/code.jpg'),
+            image: AssetImage(AppImages.imagePath1),
             fit: BoxFit.cover,
           ),
         ),
@@ -64,8 +71,8 @@ class _ThirdPageState extends State<ThirdPage> {
                     _navigateToSecondPage(dataList[index]);
                   },
                   child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.all(10.0),
+                    color: AppColors.sixthColor,
+                    padding: const EdgeInsets.all(AppSize.padding1),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -76,7 +83,7 @@ class _ThirdPageState extends State<ThirdPage> {
                               onTap: () {
                                 _deleteData(dataList[index]['id']);
                               },
-                              child: const Icon(Icons.close, color: Colors.red),
+                              child: const Icon(Icons.close, color:AppColors.eighthColor),
                             ),
                           ],
                         ),
@@ -92,7 +99,6 @@ class _ThirdPageState extends State<ThirdPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 5),
                         Text(
                           'Branch: ${dataList[index]['branch']}',
                           style: const TextStyle(
@@ -115,21 +121,20 @@ class _ThirdPageState extends State<ThirdPage> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        width: double.infinity,
-        height: 55,
+        height: sizedBoxHeight, width: sizedBoxWidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white54,
-                side: const BorderSide(color: Colors.black38, width: 2.0),
+                backgroundColor:AppColors.sixthColor,
+                side: const BorderSide(color: AppColors.seventhColor, width: 2.0),
               ),
               child: const Text(
                 "REFRESH",
                 style: TextStyle(
-                  color: Colors.deepPurple,
+                  color: AppColors.thirdColor,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
@@ -141,13 +146,13 @@ class _ThirdPageState extends State<ThirdPage> {
             const Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white54,
-                side: const BorderSide(color: Colors.black38, width: 2.0),
+                backgroundColor:AppColors.sixthColor,
+                side: const BorderSide(color: AppColors.seventhColor, width: 2.0),
               ),
               child: const Text(
                 "NEW",
                 style: TextStyle(
-                  color: Colors.deepPurple,
+                  color:AppColors.thirdColor,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),

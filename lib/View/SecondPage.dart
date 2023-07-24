@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/ThirdPage.dart';
-import 'package:flutterproject/databasehelper.dart';
+import 'package:flutterproject/View/ThirdPage.dart';
+import 'package:flutterproject/constants/a.constants.dart';
+import 'package:flutterproject/helper/databasehelper.dart';
+import 'package:flutterproject/navigationHelper.dart';
+
+
+const double sizedBoxHeight = 16.0;
 
 class SecondPage extends StatefulWidget {
   final Map<String, dynamic>? data;
@@ -32,7 +37,7 @@ class _SecondPageState extends State<SecondPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: AppColors.primaryColor,
         title: const Center(
           child: Text(
             "MİRSAD ASSİSTANT",
@@ -40,18 +45,18 @@ class _SecondPageState extends State<SecondPage> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_circle_left_outlined, color: Colors.white),
-          iconSize: 30,
+          icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
+          iconSize:AppSize.iconSize,
           onPressed: () {
-            Navigator.pop(context, _getDataMap());
+            NavigationHelper.navigateToHomePage(context);
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.arrow_circle_right_outlined, color: Colors.white),
-            iconSize: 30,
+            icon: const Icon(Icons.arrow_circle_right_outlined, color:AppColors.sixthColor),
+            iconSize: AppSize.iconSize,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()));
+              NavigationHelper.navigateToThirdPage(context);
             },
           ),
         ],
@@ -59,16 +64,15 @@ class _SecondPageState extends State<SecondPage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('photos/code.jpg'),
+            image: AssetImage(AppImages.imagePath1),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            Center(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
                     controller: titleController,
@@ -77,11 +81,11 @@ class _SecondPageState extends State<SecondPage> {
                     },
                     decoration: const InputDecoration(
                       labelText: 'Title:',
-                      fillColor: Colors.white,
+                      fillColor:AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: sizedBoxHeight),
                   TextFormField(
                     controller: portController,
                     keyboardType: TextInputType.number,
@@ -90,11 +94,11 @@ class _SecondPageState extends State<SecondPage> {
                     },
                     decoration: const InputDecoration(
                       labelText: 'Port number:',
-                      fillColor: Colors.white,
+                      fillColor: AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: sizedBoxHeight),
                   TextFormField(
                     controller: branchController,
                     onChanged: (value) {
@@ -102,46 +106,45 @@ class _SecondPageState extends State<SecondPage> {
                     },
                     decoration: const InputDecoration(
                       labelText: 'Branch Name:',
-                      fillColor: Colors.white,
+                      fillColor:AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: sizedBoxHeight),
                   TextFormField(
                     controller: dateController,
                     readOnly: true,
                     onTap: _selectDate,
                     decoration: const InputDecoration(
                       labelText: 'Date:',
-                      fillColor: Colors.white,
+                      fillColor:AppColors.sixthColor,
                       filled: true,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.sixthColor,
+                        side: const BorderSide(color:AppColors.seventhColor, width: 2.0),
+                      ),
+                      child: const Text(
+                        "SAVE",
+                        style: TextStyle(
+                          color: AppColors.thirdColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        _saveData();
+                      },
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.black38, width: 2.0),
-                ),
-                child: const Text(
-                  "SAVE",
-                  style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  _saveData();
-                },
-              ),
-            ),
-            const Spacer(),
-          ],
+          ),
         ),
       ),
     );
