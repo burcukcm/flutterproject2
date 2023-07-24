@@ -13,6 +13,7 @@ class DatabaseHelper {
     _database = await initDatabase();
     return _database!;
   }
+
   Future<Database> initDatabase() async {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath, 'infos.db');
@@ -37,6 +38,7 @@ class DatabaseHelper {
     }
 
     final db = await database;
+    var branch;
     await db.insert('infos', {
       'title': title,
       'port': port,
