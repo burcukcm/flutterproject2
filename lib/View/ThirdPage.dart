@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/View/SecondPage.dart';
 import 'package:flutterproject/helper/databasehelper.dart';
-import 'package:flutterproject/constants/a.constants.dart';
-import 'package:flutterproject/navigationHelper.dart';
-
-const double sizedBoxHeight = 55.0,sizedBoxWidth = double.infinity;
+import 'package:flutterproject/constants/app_constants.dart';
+import 'package:flutterproject/Navigation/navigationHelper.dart';
 
 class ThirdPage extends StatefulWidget {
   const ThirdPage({Key? key});
@@ -35,15 +33,15 @@ class _ThirdPageState extends State<ThirdPage> {
         backgroundColor:AppColors.primaryColor,
         title: const Center(
           child: Padding(
-            padding: EdgeInsets.only(right: 45.0),
-            child: Text("MİRSAD ASSİSTANT", style: TextStyle(fontWeight: FontWeight.bold)),
+             padding : EdgeInsets.only(right:AppSize.rightPaddingValue ),
+            child: Text(AppStrings.projectlabel, style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondPage()));
+            NavigationHelper.navigateToPage(context, SecondPage());
           },
         ),
       ),
@@ -55,7 +53,7 @@ class _ThirdPageState extends State<ThirdPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(AppSize.padding2),
           child: Scrollbar(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,53 +64,48 @@ class _ThirdPageState extends State<ThirdPage> {
               ),
               itemCount: dataList.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    _navigateToSecondPage(dataList[index]);
-                  },
-                  child: Container(
-                    color: AppColors.sixthColor,
-                    padding: const EdgeInsets.all(AppSize.padding1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _deleteData(dataList[index]['id']);
-                              },
-                              child: const Icon(Icons.close, color:AppColors.eighthColor),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'Title: ${dataList[index]['title']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                return Container(
+                  color: AppColors.sixthColor,
+                  padding: const EdgeInsets.all(AppSize.padding1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _deleteData(dataList[index]['id']);
+                            },
+                            child: const Icon(Icons.close, color:AppColors.eighthColor),
                           ),
+                        ],
+                      ),
+                      Text(
+                        'Title: ${dataList[index]['title']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          'Port: ${dataList[index]['port']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        'Port: ${dataList[index]['port']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          'Branch: ${dataList[index]['branch']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        'Branch: ${dataList[index]['branch']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          'Date: ${dataList[index]['date']}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        'Date: ${dataList[index]['date']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -121,7 +114,7 @@ class _ThirdPageState extends State<ThirdPage> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: sizedBoxHeight, width: sizedBoxWidth,
+        height: AppSize.sizedBoxHeight1, width: AppSize.sizedBoxWidth1,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -129,13 +122,13 @@ class _ThirdPageState extends State<ThirdPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:AppColors.sixthColor,
-                side: const BorderSide(color: AppColors.seventhColor, width: 2.0),
+                side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
               ),
               child: const Text(
-                "REFRESH",
+                AppStrings.refreshText,
                 style: TextStyle(
                   color: AppColors.thirdColor,
-                  fontSize: 15,
+                  fontSize: Font.fontSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -147,18 +140,18 @@ class _ThirdPageState extends State<ThirdPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:AppColors.sixthColor,
-                side: const BorderSide(color: AppColors.seventhColor, width: 2.0),
+                side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
               ),
               child: const Text(
-                "NEW",
+                AppStrings.newText,
                 style: TextStyle(
                   color:AppColors.thirdColor,
-                  fontSize: 15,
+                  fontSize: Font.fontSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               onPressed: () {
-                _navigateToSecondPage(null);
+                NavigationHelper.navigateToPage(context, SecondPage());
               },
             ),
             const Spacer(),

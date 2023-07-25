@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/Classes/HomePage.dart';
+import 'package:flutterproject/View/main.dart';
 import 'package:flutterproject/View/ThirdPage.dart';
-import 'package:flutterproject/constants/a.constants.dart';
+import 'package:flutterproject/constants/app_constants.dart';
 import 'package:flutterproject/helper/databasehelper.dart';
-import 'package:flutterproject/navigationHelper.dart';
-
-
-const double sizedBoxHeight = 16.0;
+import 'package:flutterproject/Navigation/navigationHelper.dart';
 
 class SecondPage extends StatefulWidget {
   final Map<String, dynamic>? data;
@@ -39,8 +38,7 @@ class _SecondPageState extends State<SecondPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: const Center(
-          child: Text(
-            "MİRSAD ASSİSTANT",
+          child: Text(AppStrings.projectlabel,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -48,7 +46,7 @@ class _SecondPageState extends State<SecondPage> {
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize:AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToHomePage(context);
+            NavigationHelper.navigateToPage(context, HomePage());
           },
         ),
         actions: [
@@ -56,7 +54,7 @@ class _SecondPageState extends State<SecondPage> {
             icon: const Icon(Icons.arrow_circle_right_outlined, color:AppColors.sixthColor),
             iconSize: AppSize.iconSize,
             onPressed: () {
-              NavigationHelper.navigateToThirdPage(context);
+              NavigationHelper.navigateToPage(context, ThirdPage());
             },
           ),
         ],
@@ -80,12 +78,12 @@ class _SecondPageState extends State<SecondPage> {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Title:',
+                      labelText: AppStrings.titleText,
                       fillColor:AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  SizedBox(height: sizedBoxHeight),
+                  SizedBox(height:AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: portController,
                     keyboardType: TextInputType.number,
@@ -93,46 +91,46 @@ class _SecondPageState extends State<SecondPage> {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Port number:',
+                      labelText: AppStrings.portText,
                       fillColor: AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  SizedBox(height: sizedBoxHeight),
+                  SizedBox(height:AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: branchController,
                     onChanged: (value) {
                       setState(() {});
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Branch Name:',
+                      labelText: AppStrings.branchText,
                       fillColor:AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  SizedBox(height: sizedBoxHeight),
+                  SizedBox(height:AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: dateController,
                     readOnly: true,
                     onTap: _selectDate,
                     decoration: const InputDecoration(
-                      labelText: 'Date:',
+                      labelText: AppStrings.dateText,
                       fillColor:AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: EdgeInsets.all(AppSize.paddingSize),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.sixthColor,
-                        side: const BorderSide(color:AppColors.seventhColor, width: 2.0),
+                        side: const BorderSide(color:AppColors.seventhColor, width: BorderSize.borderWidth),
                       ),
                       child: const Text(
-                        "SAVE",
+                        AppStrings.saveText,
                         style: TextStyle(
                           color: AppColors.thirdColor,
-                          fontSize: 15,
+                          fontSize: Font.fontSize,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -195,12 +193,12 @@ class _SecondPageState extends State<SecondPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('ERROR!'),
-          content: const Text('Please fill in all fields.'),
+          title: const Text(AppStrings.errorText),
+          content: const Text(AppStrings.fillText),
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: const Text(AppStrings.okText),
             ),
           ],
         ),
