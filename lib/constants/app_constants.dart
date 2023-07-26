@@ -1,7 +1,5 @@
 
 import 'dart:core';
-
-
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
@@ -52,6 +50,4 @@ class AppStrings {
   static const String errorText = "ERROR!";
   static const String okText = "OK";
   static const String fillText = "Please fill in all fields.";
-
-
 }

@@ -64,5 +64,4 @@ class DatabaseHelper {
       where: 'id = ?', whereArgs: [id],
     );
   }
-
 }

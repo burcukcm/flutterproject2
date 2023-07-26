@@ -5,6 +5,7 @@ import 'package:flutterproject/constants/app_constants.dart';
 import 'package:flutterproject/Navigation/navigationHelper.dart';
 
 class ThirdPage extends StatefulWidget {
+
   const ThirdPage({Key? key});
 
   @override
@@ -18,6 +19,7 @@ class _ThirdPageState extends State<ThirdPage> {
   @override
   void initState() {
     super.initState();
+
   }
   Future<void> _getData() async {
     dataList = await dbHelper.getAllData();
