@@ -38,7 +38,6 @@ class DatabaseHelper {
     }
 
     final db = await database;
-    var branch;
     await db.insert('infos', {
       'title': title,
       'port': port,
@@ -60,6 +59,10 @@ class DatabaseHelper {
   Future<void> updateData(Map<String, dynamic> newData) async {
     final db = await database;
     int id = newData['id'];
-    await db.update('infos', newData, where: 'id = ?', whereArgs: [id]);
+    await db.update(
+      'infos', newData,
+      where: 'id = ?', whereArgs: [id],
+    );
   }
+
 }

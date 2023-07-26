@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Classes/HomePage.dart';
-import 'package:flutterproject/View/main.dart';
 import 'package:flutterproject/View/ThirdPage.dart';
 import 'package:flutterproject/constants/app_constants.dart';
 import 'package:flutterproject/helper/databasehelper.dart';
@@ -24,12 +23,6 @@ class _SecondPageState extends State<SecondPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.data != null) {
-      titleController.text = widget.data!['title'];
-      portController.text = widget.data!['port'].toString();
-      branchController.text = widget.data!['branch'];
-      dateController.text = widget.data!['date'];
-    }
   }
 
   @override
@@ -38,20 +31,21 @@ class _SecondPageState extends State<SecondPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: const Center(
-          child: Text(AppStrings.projectlabel,
+          child: Text(
+            AppStrings.projectlabel,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
-          iconSize:AppSize.iconSize,
+          iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context, HomePage());
+            NavigationHelper.navigateToPage(context,HomePage ());
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.arrow_circle_right_outlined, color:AppColors.sixthColor),
+            icon: const Icon(Icons.arrow_circle_right_outlined, color: AppColors.sixthColor),
             iconSize: AppSize.iconSize,
             onPressed: () {
               NavigationHelper.navigateToPage(context, ThirdPage());
@@ -79,11 +73,11 @@ class _SecondPageState extends State<SecondPage> {
                     },
                     decoration: const InputDecoration(
                       labelText: AppStrings.titleText,
-                      fillColor:AppColors.sixthColor,
+                      fillColor: AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  SizedBox(height:AppSize.sizedBoxHeight),
+                  SizedBox(height: AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: portController,
                     keyboardType: TextInputType.number,
@@ -96,7 +90,7 @@ class _SecondPageState extends State<SecondPage> {
                       filled: true,
                     ),
                   ),
-                  SizedBox(height:AppSize.sizedBoxHeight),
+                  SizedBox(height: AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: branchController,
                     onChanged: (value) {
@@ -104,18 +98,18 @@ class _SecondPageState extends State<SecondPage> {
                     },
                     decoration: const InputDecoration(
                       labelText: AppStrings.branchText,
-                      fillColor:AppColors.sixthColor,
+                      fillColor: AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
-                  SizedBox(height:AppSize.sizedBoxHeight),
+                  SizedBox(height: AppSize.sizedBoxHeight),
                   TextFormField(
                     controller: dateController,
                     readOnly: true,
                     onTap: _selectDate,
                     decoration: const InputDecoration(
                       labelText: AppStrings.dateText,
-                      fillColor:AppColors.sixthColor,
+                      fillColor: AppColors.sixthColor,
                       filled: true,
                     ),
                   ),
@@ -124,8 +118,9 @@ class _SecondPageState extends State<SecondPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.sixthColor,
-                        side: const BorderSide(color:AppColors.seventhColor, width: BorderSize.borderWidth),
+                        side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
                       ),
+                      onPressed: _saveData,
                       child: const Text(
                         AppStrings.saveText,
                         style: TextStyle(
@@ -134,9 +129,6 @@ class _SecondPageState extends State<SecondPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {
-                        _saveData();
-                      },
                     ),
                   ),
                 ],
@@ -148,7 +140,7 @@ class _SecondPageState extends State<SecondPage> {
     );
   }
 
-  Future<void> _selectDate() async {
+  Future<void> _selectDate() async { // TARİH SEÇME İŞLEMİ
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -162,27 +154,28 @@ class _SecondPageState extends State<SecondPage> {
       });
     }
   }
-
+/* giriş alanları boş değilse ve geçerli veriler içeriyorsa, bir newData adlı harita (map) oluşturulur ve
+içine giriş alanlarındaki veriler eklenir.Eğer giriş alanları boşsa veya geçerli bir giriş değilse,
+bir showDialog ile hata mesajı gösterilir ve kullanıcıya uyarı verilir.*/
   void _saveData() {
     final dbHelper = DatabaseHelper();
     String title = titleController.text;
     int port = int.tryParse(portController.text) ?? 0;
-    String branchName = branchController.text;
+    String branch = branchController.text;
     String date = dateController.text;
 
-    if (title.isNotEmpty && portController.text.isNotEmpty && branchName.isNotEmpty && date.isNotEmpty) {
+    if (title.isNotEmpty && portController.text.isNotEmpty && branch.isNotEmpty && date.isNotEmpty) {
       final newData = {
         'id': widget.data != null ? widget.data!['id'] : null,
         'title': title,
         'port': port,
-        'branch': branchName,
+        'branch': branch,
         'date': date,
       };
-
       if (widget.data != null) {
         dbHelper.updateData(newData);
       } else {
-        dbHelper.insertData(title, port, branchName, date);
+        dbHelper.insertData(title, port, branch, date);
       }
 
       titleController.clear();
@@ -205,20 +198,4 @@ class _SecondPageState extends State<SecondPage> {
       );
     }
   }
-
-  Map<String, dynamic> _getDataMap() {
-    String title = titleController.text;
-    int port = int.tryParse(portController.text) ?? 0;
-    String branchName = branchController.text;
-    String date = dateController.text;
-
-    return {
-      'id': widget.data != null ? widget.data!['id'] : null,
-      'title': title,
-      'port': port,
-      'branch': branchName,
-      'date': date,
-    };
-  }
 }
-

@@ -10,17 +10,15 @@ class ThirdPage extends StatefulWidget {
   @override
   _ThirdPageState createState() => _ThirdPageState();
 }
-
 class _ThirdPageState extends State<ThirdPage> {
   final dbHelper = DatabaseHelper();
+
   List<Map<String, dynamic>> dataList = [];
 
   @override
   void initState() {
     super.initState();
-    _getData();
   }
-
   Future<void> _getData() async {
     dataList = await dbHelper.getAllData();
     setState(() {});
@@ -64,6 +62,7 @@ class _ThirdPageState extends State<ThirdPage> {
               ),
               itemCount: dataList.length,
               itemBuilder: (context, index) {
+
                 return Container(
                   color: AppColors.sixthColor,
                   padding: const EdgeInsets.all(AppSize.padding1),
@@ -160,7 +159,11 @@ class _ThirdPageState extends State<ThirdPage> {
       ),
     );
   }
-
+/* _navigateToSecondPage fonksiyonu, ThirdPage sayfasından
+ SecondPage sayfasına geçiş yapmak içi. Eğer SecondPage sayfasından
+  geri dönüşte bir sonuç alınırsa bu sonuca göre veritabanına
+  ekleme veya güncelleme işlemleri yapılıyor._getData() fonksiyonu çağrılarak
+  veriler güncelleniyor ve ThirdPage sayfasında bulunan GridView içindeki veriler de güncellenmiş oluyor. */
   void _navigateToSecondPage(Map<String, dynamic>? data) async {
     final result = await Navigator.push<Map<String, dynamic>>(
       context,
