@@ -94,7 +94,7 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.fifthColor,
       title: const Center(
         child: Padding(
-          padding: EdgeInsets.only(right: AppSize.paddingRight),
+          padding: EdgeInsets.only(right: AppSize.paddingRightbig),
           child: Text(
             AppStrings.projectlabel,
             style: TextStyle(fontWeight: FontWeight.bold),

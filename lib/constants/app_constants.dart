@@ -21,7 +21,9 @@ abstract class AppSize {
   static const double sizedBoxheight = 50.0;
   static const double padding1 = 10.0;
   static const double padding2 = 20.0;
-  static const double paddingRight = 40.0;
+  static const double paddingRightbig = 40.0;
+  static const double paddingRight = 15.0;
+  static const double paddingleft = 15.0;
   static const double iconSize = 30.0;
 }
 abstract class AppImages {
@@ -48,6 +50,7 @@ class AppStrings {
   static const String titleText = "Title:";
   static const String dateText = "Date:";
   static const String errorText = "ERROR!";
+  static const String invalidText = "İnvaid Port Number.Enter positive number!";
   static const String okText = "OK";
   static const String fillText = "Please fill in all fields.";
 }

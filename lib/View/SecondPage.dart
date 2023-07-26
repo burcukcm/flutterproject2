@@ -23,7 +23,14 @@ class _SecondPageState extends State<SecondPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.data != null) {
+      titleController.text = widget.data!['title'];
+      portController.text = widget.data!['port'].toString();
+      branchController.text = widget.data!['branch'];
+      dateController.text = widget.data!['date'];
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,7 @@ class _SecondPageState extends State<SecondPage> {
             icon: const Icon(Icons.arrow_circle_right_outlined, color: AppColors.sixthColor),
             iconSize: AppSize.iconSize,
             onPressed: () {
-              NavigationHelper.navigateToPage(context, ThirdPage());
+              NavigationHelper.navigateToPage(context, const ThirdPage());
             },
           ),
         ],
@@ -66,55 +73,67 @@ class _SecondPageState extends State<SecondPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    controller: titleController,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    decoration: const InputDecoration(
-                      labelText: AppStrings.titleText,
-                      fillColor: AppColors.sixthColor,
-                      filled: true,
+                  Padding(
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    child: TextFormField(
+                      controller: titleController,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: const InputDecoration(
+                        labelText: AppStrings.titleText,
+                        fillColor: AppColors.sixthColor,
+                        filled: true,
+                      ),
                     ),
                   ),
-                  SizedBox(height: AppSize.sizedBoxHeight),
-                  TextFormField(
-                    controller: portController,
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    decoration: const InputDecoration(
-                      labelText: AppStrings.portText,
-                      fillColor: AppColors.sixthColor,
-                      filled: true,
+                  const SizedBox(height: AppSize.sizedBoxHeight),
+                  Padding(
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    child: TextFormField(
+                      controller: portController,
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: const InputDecoration(
+                        labelText: AppStrings.portText,
+                        fillColor: AppColors.sixthColor,
+                        filled: true,
+                      ),
                     ),
                   ),
-                  SizedBox(height: AppSize.sizedBoxHeight),
-                  TextFormField(
-                    controller: branchController,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    decoration: const InputDecoration(
-                      labelText: AppStrings.branchText,
-                      fillColor: AppColors.sixthColor,
-                      filled: true,
+                  const SizedBox(height: AppSize.sizedBoxHeight),
+                  Padding(
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    child: TextFormField(
+                      controller: branchController,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: const InputDecoration(
+                        labelText: AppStrings.branchText,
+                        fillColor: AppColors.sixthColor,
+                        filled: true,
+                      ),
                     ),
                   ),
-                  SizedBox(height: AppSize.sizedBoxHeight),
-                  TextFormField(
-                    controller: dateController,
-                    readOnly: true,
-                    onTap: _selectDate,
-                    decoration: const InputDecoration(
-                      labelText: AppStrings.dateText,
-                      fillColor: AppColors.sixthColor,
-                      filled: true,
+                  const SizedBox(height: AppSize.sizedBoxHeight),
+                  Padding(
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    child: TextFormField(
+                      controller: dateController,
+                      readOnly: true,
+                      onTap: _selectDate,
+                      decoration: const InputDecoration(
+                        labelText: AppStrings.dateText,
+                        fillColor: AppColors.sixthColor,
+                        filled: true,
+                      ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(AppSize.paddingSize),
+                    padding: const EdgeInsets.all(AppSize.paddingSize),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.sixthColor,
@@ -140,7 +159,7 @@ class _SecondPageState extends State<SecondPage> {
     );
   }
 
-  Future<void> _selectDate() async { // TARİH SEÇME İŞLEMİ
+  Future<void> _selectDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -154,15 +173,34 @@ class _SecondPageState extends State<SecondPage> {
       });
     }
   }
-/* giriş alanları boş değilse ve geçerli veriler içeriyorsa, bir newData adlı harita (map) oluşturulur ve
-içine giriş alanlarındaki veriler eklenir.Eğer giriş alanları boşsa veya geçerli bir giriş değilse,
-bir showDialog ile hata mesajı gösterilir ve kullanıcıya uyarı verilir.*/
   void _saveData() {
     final dbHelper = DatabaseHelper();
     String title = titleController.text;
     int port = int.tryParse(portController.text) ?? 0;
     String branch = branchController.text;
     String date = dateController.text;
+
+    try {
+      port = int.parse(portController.text);
+      if (port < 0) {
+        throw FormatException();
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(AppStrings.errorText),
+          content: const Text(AppStrings.invalidText),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(AppStrings.okText),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
 
     if (title.isNotEmpty && portController.text.isNotEmpty && branch.isNotEmpty && date.isNotEmpty) {
       final newData = {
@@ -182,6 +220,7 @@ bir showDialog ile hata mesajı gösterilir ve kullanıcıya uyarı verilir.*/
       portController.clear();
       branchController.clear();
       dateController.clear();
+
     } else {
       showDialog(
         context: context,

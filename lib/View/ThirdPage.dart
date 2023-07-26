@@ -19,6 +19,7 @@ class _ThirdPageState extends State<ThirdPage> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(() async => await _getData());
 
   }
   Future<void> _getData() async {
@@ -41,7 +42,7 @@ class _ThirdPageState extends State<ThirdPage> {
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context, SecondPage());
+            NavigationHelper.navigateToPage(context, const SecondPage());
           },
         ),
       ),
@@ -65,48 +66,103 @@ class _ThirdPageState extends State<ThirdPage> {
               itemCount: dataList.length,
               itemBuilder: (context, index) {
 
-                return Container(
-                  color: AppColors.sixthColor,
-                  padding: const EdgeInsets.all(AppSize.padding1),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _deleteData(dataList[index]['id']);
-                            },
-                            child: const Icon(Icons.close, color:AppColors.eighthColor),
+                return GestureDetector(
+                  onTap: (){
+                    _navigateToSecondPage(dataList[index]);
+                  },
+                  child: Container(
+                    color: AppColors.sixthColor,
+                    padding: const EdgeInsets.all(AppSize.padding1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _deleteData(dataList[index]['id']);
+                              },
+                              child: const Icon(Icons.close, color:AppColors.eighthColor),
+                            ),
+                          ],
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Title: ',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.secondaryColor,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: dataList[index]['title'],
+                                style: const TextStyle(
+                                  color: AppColors.seventhColor,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Text(
-                        'Title: ${dataList[index]['title']}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      Text(
-                        'Port: ${dataList[index]['port']}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            text: 'Port: ',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.secondaryColor,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: dataList[index]['port'].toString(),
+                                style: const TextStyle(
+                                  color: AppColors.seventhColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Branch: ${dataList[index]['branch']}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            text: 'Branch: ',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.secondaryColor,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: dataList[index]['branch'],
+                                style: const TextStyle(
+                                  color: AppColors.seventhColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Date: ${dataList[index]['date']}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+
+                        RichText(
+                          text: TextSpan(
+                            text: 'Date: ',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.secondaryColor,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: dataList[index]['date'],
+                                style: const TextStyle(
+                                  color: AppColors.seventhColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -116,56 +172,53 @@ class _ThirdPageState extends State<ThirdPage> {
       ),
       bottomNavigationBar: SizedBox(
         height: AppSize.sizedBoxHeight1, width: AppSize.sizedBoxWidth1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:AppColors.sixthColor,
-                side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
-              ),
-              child: const Text(
-                AppStrings.refreshText,
-                style: TextStyle(
-                  color: AppColors.thirdColor,
-                  fontSize: Font.fontSize,
-                  fontWeight: FontWeight.bold,
+        child: Container(  color: AppColors.fifthColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:AppColors.sixthColor,
+                  side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
                 ),
-              ),
-              onPressed: () {
-                _getData();
-              },
-            ),
-            const Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:AppColors.sixthColor,
-                side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
-              ),
-              child: const Text(
-                AppStrings.newText,
-                style: TextStyle(
-                  color:AppColors.thirdColor,
-                  fontSize: Font.fontSize,
-                  fontWeight: FontWeight.bold,
+                child: const Text(
+                  AppStrings.refreshText,
+                  style: TextStyle(
+                    color: AppColors.thirdColor,
+                    fontSize: Font.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                onPressed: () {
+                  _getData();
+                },
               ),
-              onPressed: () {
-                NavigationHelper.navigateToPage(context, SecondPage());
-              },
-            ),
-            const Spacer(),
-          ],
+              const Spacer(),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:AppColors.sixthColor,
+                  side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
+                ),
+                child: const Text(
+                  AppStrings.newText,
+                  style: TextStyle(
+                    color:AppColors.thirdColor,
+                    fontSize: Font.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  NavigationHelper.navigateToPage(context, const SecondPage());
+                },
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );
   }
-/* _navigateToSecondPage fonksiyonu, ThirdPage sayfasından
- SecondPage sayfasına geçiş yapmak içi. Eğer SecondPage sayfasından
-  geri dönüşte bir sonuç alınırsa bu sonuca göre veritabanına
-  ekleme veya güncelleme işlemleri yapılıyor._getData() fonksiyonu çağrılarak
-  veriler güncelleniyor ve ThirdPage sayfasında bulunan GridView içindeki veriler de güncellenmiş oluyor. */
   void _navigateToSecondPage(Map<String, dynamic>? data) async {
     final result = await Navigator.push<Map<String, dynamic>>(
       context,
