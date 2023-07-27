@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/View/SecondPage.dart';
-import 'package:flutterproject/helper/databasehelper.dart';
+import 'package:flutterproject/View/second_view.dart';
+import 'package:flutterproject/helper/database_helper.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/Navigation/navigationHelper.dart';
+import 'package:flutterproject/Navigation/navigation_helper.dart';
 
-class ThirdPage extends StatefulWidget {
+class ThirdView extends StatefulWidget {
 
-  const ThirdPage({Key? key});
+  const ThirdView({Key? key});
 
   @override
-  _ThirdPageState createState() => _ThirdPageState();
+  _ThirdViewState createState() => _ThirdViewState();
 }
-class _ThirdPageState extends State<ThirdPage> {
+class _ThirdViewState extends State<ThirdView> {
   final dbHelper = DatabaseHelper();
 
   List<Map<String, dynamic>> dataList = [];
+
+  List<bool> isServiceActiveList = [true, false, true, true, false, true, true, false, true, false, true ];
 
   @override
   void initState() {
@@ -26,6 +28,9 @@ class _ThirdPageState extends State<ThirdPage> {
     dataList = await dbHelper.getAllData();
     setState(() {});
   }
+  Color getServiceStatusColor(bool isServiceActive) {
+    return isServiceActive ? Colors.green : Colors.red;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +40,14 @@ class _ThirdPageState extends State<ThirdPage> {
         title: const Center(
           child: Padding(
              padding : EdgeInsets.only(right:AppSize.rightPaddingValue ),
-            child: Text(AppStrings.projectlabel, style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(AppStrings.projectLabel, style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context, const SecondPage());
+            NavigationHelper.navigateToPage(context, const SecondView());
           },
         ),
       ),
@@ -65,13 +70,13 @@ class _ThirdPageState extends State<ThirdPage> {
               ),
               itemCount: dataList.length,
               itemBuilder: (context, index) {
-
+                bool isServiceActive = isServiceActiveList[index];
                 return GestureDetector(
                   onTap: (){
                     _navigateToSecondPage(dataList[index]);
                   },
                   child: Container(
-                    color: AppColors.sixthColor,
+                    color: getServiceStatusColor(isServiceActive),
                     padding: const EdgeInsets.all(AppSize.padding1),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +88,7 @@ class _ThirdPageState extends State<ThirdPage> {
                               onTap: () {
                                 _deleteData(dataList[index]['id']);
                               },
-                              child: const Icon(Icons.close, color:AppColors.eighthColor),
+                              child: const Icon(Icons.close, color: AppColors.seventhColor),
                             ),
                           ],
                         ),
@@ -93,7 +98,7 @@ class _ThirdPageState extends State<ThirdPage> {
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.thirdColor,
                             ),
                             children: [
                               TextSpan(
@@ -111,7 +116,7 @@ class _ThirdPageState extends State<ThirdPage> {
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.thirdColor,
                             ),
                             children: [
                               TextSpan(
@@ -129,7 +134,7 @@ class _ThirdPageState extends State<ThirdPage> {
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.thirdColor,
                             ),
                             children: [
                               TextSpan(
@@ -148,7 +153,7 @@ class _ThirdPageState extends State<ThirdPage> {
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.thirdColor,
                             ),
                             children: [
                               TextSpan(
@@ -209,7 +214,7 @@ class _ThirdPageState extends State<ThirdPage> {
                   ),
                 ),
                 onPressed: () {
-                  NavigationHelper.navigateToPage(context, const SecondPage());
+                  NavigationHelper.navigateToPage(context, const SecondView());
                 },
               ),
               const Spacer(),
@@ -223,7 +228,7 @@ class _ThirdPageState extends State<ThirdPage> {
     final result = await Navigator.push<Map<String, dynamic>>(
       context,
       MaterialPageRoute(
-        builder: (context) => SecondPage(data: data),
+        builder: (context) => SecondView(data: data),
       ),
     );
     if (result != null) {

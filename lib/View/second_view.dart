@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/Classes/HomePage.dart';
-import 'package:flutterproject/View/ThirdPage.dart';
+import 'package:flutterproject/Navigation/navigation_helper.dart';
+import 'package:flutterproject/View/home_view.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/helper/databasehelper.dart';
-import 'package:flutterproject/Navigation/navigationHelper.dart';
+import 'package:flutterproject/helper/database_helper.dart';
 
-class SecondPage extends StatefulWidget {
+class SecondView extends StatefulWidget {
   final Map<String, dynamic>? data;
 
-  const SecondPage({Key? key, this.data}) : super(key: key);
+  const SecondView({Key? key, this.data}) : super(key: key);
 
   @override
-  _SecondPageState createState() => _SecondPageState();
+  _SecondViewState createState() => _SecondViewState();
 }
-
-class _SecondPageState extends State<SecondPage> {
+class _SecondViewState extends State<SecondView> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController portController = TextEditingController();
   final TextEditingController branchController = TextEditingController();
@@ -38,27 +36,21 @@ class _SecondPageState extends State<SecondPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: const Center(
-          child: Text(
-            AppStrings.projectlabel,
-            style: TextStyle(fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: EdgeInsets.only(right: AppSize.paddingSize),
+            child: Text(
+              AppStrings.projectLabel,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context,HomePage ());
+            NavigationHelper.navigateToPage(context, const HomeViev());
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_circle_right_outlined, color: AppColors.sixthColor),
-            iconSize: AppSize.iconSize,
-            onPressed: () {
-              NavigationHelper.navigateToPage(context, const ThirdPage());
-            },
-          ),
-        ],
       ),
       body: DecoratedBox(
         decoration: const BoxDecoration(
@@ -74,7 +66,7 @@ class _SecondPageState extends State<SecondPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
                     child: TextFormField(
                       controller: titleController,
                       onChanged: (value) {
@@ -89,7 +81,7 @@ class _SecondPageState extends State<SecondPage> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
                     child: TextFormField(
                       controller: portController,
                       keyboardType: TextInputType.number,
@@ -105,7 +97,7 @@ class _SecondPageState extends State<SecondPage> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
                     child: TextFormField(
                       controller: branchController,
                       onChanged: (value) {
@@ -120,7 +112,7 @@ class _SecondPageState extends State<SecondPage> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingleft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
                     child: TextFormField(
                       controller: dateController,
                       readOnly: true,
@@ -166,13 +158,13 @@ class _SecondPageState extends State<SecondPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-
     if (pickedDate != null) {
       setState(() {
         dateController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
       });
     }
   }
+
   void _saveData() {
     final dbHelper = DatabaseHelper();
     String title = titleController.text;
@@ -183,7 +175,7 @@ class _SecondPageState extends State<SecondPage> {
     try {
       port = int.parse(portController.text);
       if (port < 0) {
-        throw FormatException();
+        throw const FormatException();
       }
     } catch (e) {
       showDialog(
@@ -215,12 +207,10 @@ class _SecondPageState extends State<SecondPage> {
       } else {
         dbHelper.insertData(title, port, branch, date);
       }
-
       titleController.clear();
       portController.clear();
       branchController.clear();
       dateController.clear();
-
     } else {
       showDialog(
         context: context,

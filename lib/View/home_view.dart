@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/View/SecondPage.dart';
-import 'package:flutterproject/View/ThirdPage.dart';
+import 'package:flutterproject/View/second_view.dart';
+import 'package:flutterproject/View/third_view.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/Navigation/navigationHelper.dart';
+import 'package:flutterproject/Navigation/navigation_helper.dart';
 
-class HomePage extends StatelessWidget {
+class HomeViev extends StatelessWidget {
+  const HomeViev({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: MyAppBar1(),
       body: MyDecoratedBox(),
     );
@@ -15,6 +17,8 @@ class HomePage extends StatelessWidget {
 }
 
 class MyDecoratedBox extends StatelessWidget {
+  const MyDecoratedBox({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
@@ -33,7 +37,7 @@ class MyDecoratedBox extends StatelessWidget {
             child: Text(
               AppStrings.entryText,
               style: TextStyle(
-                fontSize: Font.entryfont,
+                fontSize: Font.entryFont,
                 color: AppColors.sixthColor,
                 fontStyle: FontStyle.italic,
               ),
@@ -43,24 +47,24 @@ class MyDecoratedBox extends StatelessWidget {
           Center(
             child: SizedBox(
               width: AppSize.sizedBoxWidth,
-              height: AppSize.sizedBoxheight,
+              height: AppSize.SizedBoxHeight,
               child: ElevatedButton(
-                child: const Text(
-                  AppStrings.newText,
-                  style: TextStyle(
-                    color: AppColors.thirdColor,
-                    fontSize: Font.buttonfont,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 onPressed: () {
-                  NavigationHelper.navigateToPage(context, const SecondPage());
+                  NavigationHelper.navigateToPage(context, const SecondView());
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BorderSize.borderRadiusCircular),
                   ),
                   backgroundColor: Colors.white,
+                ),
+                child: const Text(
+                  AppStrings.newText,
+                  style: TextStyle(
+                    color: AppColors.thirdColor,
+                    fontSize: Font.buttonFont,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -73,9 +77,10 @@ class MyDecoratedBox extends StatelessWidget {
 }
 
 class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar1({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -86,7 +91,7 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ThirdPage(),
+              builder: (context) => const ThirdView(),
             ),
           );
         },
@@ -94,9 +99,9 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.fifthColor,
       title: const Center(
         child: Padding(
-          padding: EdgeInsets.only(right: AppSize.paddingRightbig),
+          padding: EdgeInsets.only(right: AppSize.paddingRightBig),
           child: Text(
-            AppStrings.projectlabel,
+            AppStrings.projectLabel,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),

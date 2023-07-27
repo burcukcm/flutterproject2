@@ -1,16 +1,14 @@
-import 'package:flutterproject/View/SecondPage.dart';
-import 'package:flutterproject/View/ThirdPage.dart';
+
 import 'package:flutter/material.dart';
-import '../Classes/HomePage.dart';
+import 'View/home_view.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/Navigation/navigationHelper.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.thirdColor),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: const HomeViev(),
     );
   }
 }
