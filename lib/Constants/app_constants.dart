@@ -53,8 +53,7 @@ class AppStrings {
   static const String titleText = "Title:";
   static const String dateText = "Date:";
   static const String errorText = "ERROR!";
-  static const String invalidText =
-      "Invalid port number.Please enter positive number!";
+  static const String invalidText = "Invalid port number.Please enter positive number!";
   static const String okText = "OK";
   static const String fillText = "Please fill in all fields.";
 }

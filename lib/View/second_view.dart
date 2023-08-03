@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/Navigation/navigation_helper.dart';
-import 'package:flutterproject/View/home_view.dart';
+import 'package:flutterproject/ViewModel/second_view_model.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/helper/database_helper.dart';
 
 class SecondView extends StatefulWidget {
-  final Map<String, dynamic>? data;
 
+  final Map<String, dynamic>? data;
   const SecondView({Key? key, this.data}) : super(key: key);
 
   @override
   _SecondViewState createState() => _SecondViewState();
 }
+
 class _SecondViewState extends State<SecondView> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController portController = TextEditingController();
-  final TextEditingController branchController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
+  late SecondViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    if (widget.data != null) {
-      titleController.text = widget.data!['title'];
-      portController.text = widget.data!['port'].toString();
-      branchController.text = widget.data!['branch'];
-      dateController.text = widget.data!['date'];
-    }
+    _viewModel = SecondViewModel();
+    _viewModel.initializeData(widget.data);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +39,7 @@ class _SecondViewState extends State<SecondView> {
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context, const HomeViev());
+            _viewModel.navigateToHomeView(context);
           },
         ),
       ),
@@ -66,9 +57,9 @@ class _SecondViewState extends State<SecondView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
-                      controller: titleController,
+                      controller: _viewModel.titleController,
                       onChanged: (value) {
                         setState(() {});
                       },
@@ -81,9 +72,9 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
-                      controller: portController,
+                      controller: _viewModel.portController,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         setState(() {});
@@ -97,9 +88,9 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
-                      controller: branchController,
+                      controller: _viewModel.branchController,
                       onChanged: (value) {
                         setState(() {});
                       },
@@ -112,11 +103,11 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight,left:AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
-                      controller: dateController,
+                      controller: _viewModel.dateController,
                       readOnly: true,
-                      onTap: _selectDate,
+                      onTap: () => _viewModel.selectDate(context),
                       decoration: const InputDecoration(
                         labelText: AppStrings.dateText,
                         fillColor: AppColors.sixthColor,
@@ -131,7 +122,7 @@ class _SecondViewState extends State<SecondView> {
                         backgroundColor: AppColors.sixthColor,
                         side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
                       ),
-                      onPressed: _saveData,
+                      onPressed: () => _viewModel.saveData(context, widget.data),
                       child: const Text(
                         AppStrings.saveText,
                         style: TextStyle(
@@ -150,81 +141,5 @@ class _SecondViewState extends State<SecondView> {
       ),
     );
   }
-
-  Future<void> _selectDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        dateController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-      });
-    }
-  }
-
-  void _saveData() {
-    final dbHelper = DatabaseHelper();
-    String title = titleController.text;
-    int port = int.tryParse(portController.text) ?? 0;
-    String branch = branchController.text;
-    String date = dateController.text;
-
-    try {
-      port = int.parse(portController.text);
-      if (port < 0) {
-        throw const FormatException();
-      }
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(AppStrings.errorText),
-          content: const Text(AppStrings.invalidText),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(AppStrings.okText),
-            ),
-          ],
-        ),
-      );
-      return;
-    }
-
-    if (title.isNotEmpty && portController.text.isNotEmpty && branch.isNotEmpty && date.isNotEmpty) {
-      final newData = {
-        'id': widget.data != null ? widget.data!['id'] : null,
-        'title': title,
-        'port': port,
-        'branch': branch,
-        'date': date,
-      };
-      if (widget.data != null) {
-        dbHelper.updateData(newData);
-      } else {
-        dbHelper.insertData(title, port, branch, date);
-      }
-      titleController.clear();
-      portController.clear();
-      branchController.clear();
-      dateController.clear();
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(AppStrings.errorText),
-          content: const Text(AppStrings.fillText),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(AppStrings.okText),
-            ),
-          ],
-        ),
-      );
-    }
-  }
 }
+

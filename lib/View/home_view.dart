@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/View/second_view.dart';
-import 'package:flutterproject/View/third_view.dart';
+import 'package:flutterproject/ViewModel/home_view_model.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/Navigation/navigation_helper.dart';
+import 'package:provider/provider.dart';
 
-class HomeViev extends StatelessWidget {
-  const HomeViev({super.key});
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: MyAppBar1(),
-      body: MyDecoratedBox(),
+
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (_) => HomeViewModel(),
+      child: const Scaffold(
+        appBar: MyAppBar1(),
+        body: MyDecoratedBox(),
+      ),
     );
   }
 }
@@ -21,6 +24,9 @@ class MyDecoratedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final homeViewModel = Provider.of<HomeViewModel>(context);
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -50,7 +56,7 @@ class MyDecoratedBox extends StatelessWidget {
               height: AppSize.SizedBoxHeight,
               child: ElevatedButton(
                 onPressed: () {
-                  NavigationHelper.navigateToPage(context, const SecondView());
+                  homeViewModel.navigateToSecondView(context);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -83,17 +89,13 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
+    final homeViewModel = Provider.of<HomeViewModel>(context);
     return AppBar(
       leading: IconButton(
         icon: const Icon(Icons.dashboard_outlined, color: AppColors.sixthColor),
         iconSize: AppSize.iconSize,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ThirdView(),
-            ),
-          );
+          homeViewModel.navigateToThirdView(context);
         },
       ),
       backgroundColor: AppColors.fifthColor,
@@ -109,6 +111,7 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+
 
 
 

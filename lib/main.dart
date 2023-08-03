@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mirsad Assistant',
+      title: AppStrings.projectLabel,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.thirdColor),
         useMaterial3: true,
       ),
-      home: const HomeViev(),
+      home: const HomeView(),
     );
   }
 }

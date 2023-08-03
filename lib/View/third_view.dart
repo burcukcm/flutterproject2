@@ -1,53 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/View/second_view.dart';
-import 'package:flutterproject/helper/database_helper.dart';
 import 'package:flutterproject/constants/app_constants.dart';
-import 'package:flutterproject/Navigation/navigation_helper.dart';
+import 'package:flutterproject/ViewModel/third_view_model.dart';
+import 'package:provider/provider.dart';
 
-class ThirdView extends StatefulWidget {
-
+class ThirdView extends StatelessWidget {
   const ThirdView({Key? key});
 
   @override
-  _ThirdViewState createState() => _ThirdViewState();
-}
-class _ThirdViewState extends State<ThirdView> {
-  final dbHelper = DatabaseHelper();
-
-  List<Map<String, dynamic>> dataList = [];
-
-  List<bool> isServiceActiveList = [true, false, true, true, false, true, true, false, true, false, true ];
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() async => await _getData());
-
-  }
-  Future<void> _getData() async {
-    dataList = await dbHelper.getAllData();
-    setState(() {});
-  }
-  Color getServiceStatusColor(bool isServiceActive) {
-    return isServiceActive ? Colors.green : Colors.red;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ThirdViewModel>(
+      create: (_) => ThirdViewModel(context),
+      builder: (context, _) {
+        return _buildScaffold(context);
+      },
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
+
+    final viewModel = Provider.of<ThirdViewModel>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:AppColors.primaryColor,
+        backgroundColor: AppColors.primaryColor,
         title: const Center(
           child: Padding(
-             padding : EdgeInsets.only(right:AppSize.rightPaddingValue ),
-            child: Text(AppStrings.projectLabel, style: TextStyle(fontWeight: FontWeight.bold)),
+            padding: EdgeInsets.only(right: AppSize.rightPaddingValue),
+            child: Text(
+              AppStrings.projectLabel,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            NavigationHelper.navigateToPage(context, const SecondView());
+            viewModel.navigateToSecondView();
           },
         ),
       ),
@@ -68,15 +57,15 @@ class _ThirdViewState extends State<ThirdView> {
                 crossAxisSpacing: 10,
                 childAspectRatio: 1,
               ),
-              itemCount: dataList.length,
+              itemCount: viewModel.dataList.length,
               itemBuilder: (context, index) {
-                bool isServiceActive = isServiceActiveList[index];
+                bool isServiceActive = viewModel.isServiceActiveList[index];
                 return GestureDetector(
-                  onTap: (){
-                    _navigateToSecondPage(dataList[index]);
+                  onTap: () {
+                    viewModel.navigateToSecondPage(viewModel.dataList[index]);
                   },
                   child: Container(
-                    color: getServiceStatusColor(isServiceActive),
+                    color: viewModel.getServiceStatusColor(isServiceActive),
                     padding: const EdgeInsets.all(AppSize.padding1),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +75,7 @@ class _ThirdViewState extends State<ThirdView> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _deleteData(dataList[index]['id']);
+                                viewModel.deleteData(viewModel.dataList[index]['id']);
                               },
                               child: const Icon(Icons.close, color: AppColors.seventhColor),
                             ),
@@ -102,7 +91,7 @@ class _ThirdViewState extends State<ThirdView> {
                             ),
                             children: [
                               TextSpan(
-                                text: dataList[index]['title'],
+                                text: viewModel.dataList[index]['title'],
                                 style: const TextStyle(
                                   color: AppColors.seventhColor,
                                 ),
@@ -120,7 +109,7 @@ class _ThirdViewState extends State<ThirdView> {
                             ),
                             children: [
                               TextSpan(
-                                text: dataList[index]['port'].toString(),
+                                text: viewModel.dataList[index]['port'].toString(),
                                 style: const TextStyle(
                                   color: AppColors.seventhColor,
                                 ),
@@ -138,7 +127,7 @@ class _ThirdViewState extends State<ThirdView> {
                             ),
                             children: [
                               TextSpan(
-                                text: dataList[index]['branch'],
+                                text: viewModel.dataList[index]['branch'],
                                 style: const TextStyle(
                                   color: AppColors.seventhColor,
                                 ),
@@ -146,7 +135,6 @@ class _ThirdViewState extends State<ThirdView> {
                             ],
                           ),
                         ),
-
                         RichText(
                           text: TextSpan(
                             text: 'Date: ',
@@ -157,7 +145,7 @@ class _ThirdViewState extends State<ThirdView> {
                             ),
                             children: [
                               TextSpan(
-                                text: dataList[index]['date'],
+                                text: viewModel.dataList[index]['date'],
                                 style: const TextStyle(
                                   color: AppColors.seventhColor,
                                   fontWeight: FontWeight.bold,
@@ -176,15 +164,17 @@ class _ThirdViewState extends State<ThirdView> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: AppSize.sizedBoxHeight1, width: AppSize.sizedBoxWidth1,
-        child: Container(  color: AppColors.fifthColor,
+        height: AppSize.sizedBoxHeight1,
+        width: AppSize.sizedBoxWidth1,
+        child: Container(
+          color: AppColors.fifthColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:AppColors.sixthColor,
+                  backgroundColor: AppColors.sixthColor,
                   side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
                 ),
                 child: const Text(
@@ -196,25 +186,25 @@ class _ThirdViewState extends State<ThirdView> {
                   ),
                 ),
                 onPressed: () {
-                  _getData();
+                  viewModel.getData();
                 },
               ),
               const Spacer(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:AppColors.sixthColor,
+                  backgroundColor: AppColors.sixthColor,
                   side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
                 ),
                 child: const Text(
                   AppStrings.newText,
                   style: TextStyle(
-                    color:AppColors.thirdColor,
+                    color: AppColors.thirdColor,
                     fontSize: Font.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 onPressed: () {
-                  NavigationHelper.navigateToPage(context, const SecondView());
+                  viewModel.navigateToSecondView();
                 },
               ),
               const Spacer(),
@@ -224,66 +214,7 @@ class _ThirdViewState extends State<ThirdView> {
       ),
     );
   }
-  void _navigateToSecondPage(Map<String, dynamic>? data) async {
-    final result = await Navigator.push<Map<String, dynamic>>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SecondView(data: data),
-      ),
-    );
-    if (result != null) {
-      if (data == null) {
-        _saveData(result);
-      } else {
-        _updateData(result);
-      }
-    }
-    _getData();
-  }
-
-  void _saveData(Map<String, dynamic> newData) async {
-    String title = newData['title'];
-    int port = newData['port'];
-    String branchName = newData['branch'];
-    String date = newData['date'];
-
-    if (title.isNotEmpty && port > 0 && branchName.isNotEmpty && date.isNotEmpty) {
-      dbHelper.insertData(title, port, branchName, date);
-    } else {
-      _showErrorDialog("Please fill in all fields.");
-    }
-  }
-
-  void _updateData(Map<String, dynamic> updatedData) async {
-    try {
-      await dbHelper.updateData(updatedData);
-    } catch (e) {
-      _showErrorDialog(e.toString());
-    }
-  }
-
-  void _deleteData(int id) async {
-    await dbHelper.deleteData(id);
-    _getData();
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('ERROR!'),
-        content: Text(message),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 }
-
 
 
 
