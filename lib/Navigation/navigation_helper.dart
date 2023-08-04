@@ -9,4 +9,3 @@ class NavigationHelper {
     Navigator.pop(context);
   }
 }
-

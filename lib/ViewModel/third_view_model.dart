@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutterproject/Models/data_model.dart';
-import 'package:flutterproject/helper/database_helper.dart';
-import 'package:flutterproject/View/second_view.dart';
 import 'package:flutterproject/Navigation/navigation_helper.dart';
+import 'package:flutterproject/View/second_view.dart';
+import 'package:flutterproject/helper/database_helper.dart';
+import 'package:flutterproject/Constants/app_constants.dart';
 
 class ThirdViewModel extends ChangeNotifier {
   final BuildContext context;
@@ -37,8 +37,8 @@ class ThirdViewModel extends ChangeNotifier {
     return isServiceActive ? Colors.green : Colors.red;
   }
 
-  void navigateToSecondView() {
-    NavigationHelper.navigateToPage(context, const SecondView());
+  void onBackPressed() {
+    NavigationHelper.pop(context);
   }
 
   void navigateToSecondPage(Map<String, dynamic>? data) async {
@@ -58,6 +58,33 @@ class ThirdViewModel extends ChangeNotifier {
     getData();
   }
 
+  void showDeleteConfirmationDialog(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(AppStrings.deleteText),
+          content: const Text(AppStrings.questionText),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(AppStrings.approveText),
+              onPressed: () {
+                deleteData(id);
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text(AppStrings.refuseText),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void saveData(Map<String, dynamic> newData) async {
     DataModel dataModel = DataModel(
         title: newData['title'],
@@ -65,13 +92,12 @@ class ThirdViewModel extends ChangeNotifier {
         branchName: newData['branch'],
         date: newData['date']);
 
-    if (dataModel != null &&
-        dataModel.port > 0 &&
+    if (dataModel.port > 0 &&
         dataModel.branchName.isNotEmpty &&
         dataModel.date.isNotEmpty) {
-      dbHelper.addData( dataModel);
+      dbHelper.addData(dataModel);
     } else {
-      _showErrorDialog("Please fill in all fields.");
+      _showErrorDialog(AppStrings.fillText);
     }
   }
 
@@ -92,12 +118,12 @@ class ThirdViewModel extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('ERROR!'),
+        title: const Text(AppStrings.errorText),
         content: Text(message),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: const Text(AppStrings.okText),
           ),
         ],
       ),

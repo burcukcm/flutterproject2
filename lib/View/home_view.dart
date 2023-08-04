@@ -8,7 +8,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider<HomeViewModel>(
       create: (_) => HomeViewModel(),
       child: const Scaffold(
@@ -24,8 +23,9 @@ class MyDecoratedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final homeViewModel = Provider.of<HomeViewModel>(context);
+
+    const double sizedBoxHeightButton = 50.0;
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -53,14 +53,15 @@ class MyDecoratedBox extends StatelessWidget {
           Center(
             child: SizedBox(
               width: AppSize.sizedBoxWidth,
-              height: AppSize.SizedBoxHeight,
+              height: sizedBoxHeightButton,
               child: ElevatedButton(
                 onPressed: () {
                   homeViewModel.navigateToSecondView(context);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(BorderSize.borderRadiusCircular),
+                    borderRadius:
+                        BorderRadius.circular(BorderSize.borderRadiusCircular),
                   ),
                   backgroundColor: Colors.white,
                 ),
@@ -87,6 +88,7 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
   @override
   Widget build(BuildContext context) {
     final homeViewModel = Provider.of<HomeViewModel>(context);
@@ -111,9 +113,3 @@ class MyAppBar1 extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-
-
-
-
-
-

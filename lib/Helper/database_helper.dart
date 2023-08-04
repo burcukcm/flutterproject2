@@ -14,8 +14,9 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     //database adında bir asenkron getter yöntemidir. Asenkron işlemler, beklemeyi gerektiren işlemleri etkin bir şekilde yönetmek için kullanılır.
-    if (_database != null)
+    if (_database != null) {
       return _database!; //Bu satır, _database değişkeninin null olup olmadığını kontrol eder. Null değilse var olanı döndürür.
+    }
     _database =
         await initDatabase(); //Eğer _database null ise, initDatabase() adında başka bir asenkron yöntemi çağırır. Bu yöntem veritabanını oluşturur ve hazır hale getirir.
     return _database!; //initDatabase() asenkron olduğu için await kullanılmış.Son olarak, oluşturulan veritabanı örneği döndürülür.

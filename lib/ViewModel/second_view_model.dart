@@ -6,7 +6,6 @@ import 'package:flutterproject/constants/app_constants.dart';
 import 'package:flutterproject/Models/data_model.dart';
 
 class SecondViewModel with ChangeNotifier {
-
   void navigateToHomeView(BuildContext context) {
     NavigationHelper.navigateToPage(context, const HomeView());
   }
@@ -34,7 +33,7 @@ class SecondViewModel with ChangeNotifier {
     );
     if (pickedDate != null) {
       dateController.text =
-      "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
       notifyListeners();
     }
   }
@@ -72,12 +71,12 @@ class SecondViewModel with ChangeNotifier {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('Invalid port value. Please enter a valid port number.'),
+          title: const Text(AppStrings.errorText),
+          content: const Text(AppStrings.invalidText),
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: const Text(AppStrings.okText),
             ),
           ],
         ),
@@ -86,7 +85,7 @@ class SecondViewModel with ChangeNotifier {
     }
 
     final newData = {
-      'id': data != null ? data ['id'] : null,
+      'id': data != null ? data['id'] : null,
       'title': title,
       'port': port,
       'branch': branch,
@@ -95,7 +94,8 @@ class SecondViewModel with ChangeNotifier {
     if (data != null) {
       dbHelper.updateData(newData);
     } else {
-      dbHelper.addData(DataModel(title: title, port: port, branchName: branch, date: date));
+      dbHelper.addData(
+          DataModel(title: title, port: port, branchName: branch, date: date));
     }
     titleController.clear();
     portController.clear();

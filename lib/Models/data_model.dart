@@ -1,9 +1,8 @@
-
 class DataModel {
-   String title;
-   int port;
-   String branchName;
-   String date;
+  String title;
+  int port;
+  String branchName;
+  String date;
 
   DataModel({
     required this.title,

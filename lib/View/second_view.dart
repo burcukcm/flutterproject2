@@ -3,8 +3,8 @@ import 'package:flutterproject/ViewModel/second_view_model.dart';
 import 'package:flutterproject/constants/app_constants.dart';
 
 class SecondView extends StatefulWidget {
-
   final Map<String, dynamic>? data;
+
   const SecondView({Key? key, this.data}) : super(key: key);
 
   @override
@@ -36,7 +36,8 @@ class _SecondViewState extends State<SecondView> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
+          icon: const Icon(Icons.arrow_circle_left_outlined,
+              color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
             _viewModel.navigateToHomeView(context);
@@ -57,7 +58,8 @@ class _SecondViewState extends State<SecondView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(
+                        right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
                       controller: _viewModel.titleController,
                       onChanged: (value) {
@@ -72,7 +74,8 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(
+                        right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
                       controller: _viewModel.portController,
                       keyboardType: TextInputType.number,
@@ -88,7 +91,8 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(
+                        right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
                       controller: _viewModel.branchController,
                       onChanged: (value) {
@@ -103,7 +107,8 @@ class _SecondViewState extends State<SecondView> {
                   ),
                   const SizedBox(height: AppSize.sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.only(right: AppSize.paddingRight, left: AppSize.paddingLeft),
+                    padding: const EdgeInsets.only(
+                        right: AppSize.paddingRight, left: AppSize.paddingLeft),
                     child: TextFormField(
                       controller: _viewModel.dateController,
                       readOnly: true,
@@ -120,9 +125,12 @@ class _SecondViewState extends State<SecondView> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.sixthColor,
-                        side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
+                        side: const BorderSide(
+                            color: AppColors.seventhColor,
+                            width: BorderSize.borderWidth),
                       ),
-                      onPressed: () => _viewModel.saveData(context, widget.data),
+                      onPressed: () =>
+                          _viewModel.saveData(context, widget.data),
                       child: const Text(
                         AppStrings.saveText,
                         style: TextStyle(
@@ -142,4 +150,3 @@ class _SecondViewState extends State<SecondView> {
     );
   }
 }
-

@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 class ThirdView extends StatelessWidget {
   const ThirdView({Key? key});
 
+  static const double textFontSize = 20.0; // app_constants sayfasına eklediğimde burada tanımadı o yüzden burada tanımlıyorum.
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThirdViewModel>(
@@ -17,7 +19,6 @@ class ThirdView extends StatelessWidget {
   }
 
   Widget _buildScaffold(BuildContext context) {
-
     final viewModel = Provider.of<ThirdViewModel>(context, listen: true);
 
     return Scaffold(
@@ -33,10 +34,11 @@ class ThirdView extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_circle_left_outlined, color: AppColors.sixthColor),
+          icon: const Icon(Icons.arrow_circle_left_outlined,
+              color: AppColors.sixthColor),
           iconSize: AppSize.iconSize,
           onPressed: () {
-            viewModel.navigateToSecondView();
+            viewModel.onBackPressed();
           },
         ),
       ),
@@ -75,17 +77,19 @@ class ThirdView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                viewModel.deleteData(viewModel.dataList[index]['id']);
+                                viewModel.showDeleteConfirmationDialog(
+                                    context, viewModel.dataList[index]['id']);
                               },
-                              child: const Icon(Icons.close, color: AppColors.seventhColor),
+                              child: const Icon(Icons.close,
+                                  color: AppColors.seventhColor),
                             ),
                           ],
                         ),
                         RichText(
                           text: TextSpan(
-                            text: 'Title: ',
+                            text: AppStrings.titleText,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: ThirdView.textFontSize,
                               fontWeight: FontWeight.bold,
                               color: AppColors.thirdColor,
                             ),
@@ -101,15 +105,16 @@ class ThirdView extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                            text: 'Port: ',
+                            text: AppStrings.portText,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: ThirdView.textFontSize,
                               fontWeight: FontWeight.bold,
                               color: AppColors.thirdColor,
                             ),
                             children: [
                               TextSpan(
-                                text: viewModel.dataList[index]['port'].toString(),
+                                text: viewModel.dataList[index]['port']
+                                    .toString(),
                                 style: const TextStyle(
                                   color: AppColors.seventhColor,
                                 ),
@@ -119,9 +124,9 @@ class ThirdView extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                            text: 'Branch: ',
+                            text: AppStrings.branchText,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: ThirdView.textFontSize,
                               fontWeight: FontWeight.bold,
                               color: AppColors.thirdColor,
                             ),
@@ -137,9 +142,9 @@ class ThirdView extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                            text: 'Date: ',
+                            text: AppStrings.dateText,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: ThirdView.textFontSize,
                               fontWeight: FontWeight.bold,
                               color: AppColors.thirdColor,
                             ),
@@ -175,7 +180,9 @@ class ThirdView extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.sixthColor,
-                  side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
+                  side: const BorderSide(
+                      color: AppColors.seventhColor,
+                      width: BorderSize.borderWidth),
                 ),
                 child: const Text(
                   AppStrings.refreshText,
@@ -193,7 +200,9 @@ class ThirdView extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.sixthColor,
-                  side: const BorderSide(color: AppColors.seventhColor, width: BorderSize.borderWidth),
+                  side: const BorderSide(
+                      color: AppColors.seventhColor,
+                      width: BorderSize.borderWidth),
                 ),
                 child: const Text(
                   AppStrings.newText,
@@ -204,7 +213,7 @@ class ThirdView extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  viewModel.navigateToSecondView();
+                  viewModel.onBackPressed();
                 },
               ),
               const Spacer(),
@@ -215,6 +224,3 @@ class ThirdView extends StatelessWidget {
     );
   }
 }
-
-
-

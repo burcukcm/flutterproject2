@@ -7,7 +7,8 @@ class HomeViewModel with ChangeNotifier {
   void navigateToSecondView(BuildContext context) {
     NavigationHelper.navigateToPage(context, const SecondView());
   }
+
   void navigateToThirdView(BuildContext context) {
-    NavigationHelper.navigateToPage(context, ThirdView());
+    NavigationHelper.navigateToPage(context, const ThirdView());
   }
 }
